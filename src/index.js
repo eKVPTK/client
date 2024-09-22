@@ -5,6 +5,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { UserStoreProvider } from './store/UserStore';
 import { DeviceStoreProvider } from './store/DeviceStore';
+import './input.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

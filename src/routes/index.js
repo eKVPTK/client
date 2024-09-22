@@ -4,10 +4,11 @@ import Basket from '../pages/Basket';
 import Shop from '../pages/Shop';
 import CreateDevice from '../pages/CreateDevice';
 import { Component } from 'react';
-import { ADMIN_CHAT, ADMIN_ROUTE, BASKET_ROUTE, CREATE_DEVICE_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, USER_CHAT } from '../utils/consts';
+import { ABOUT_ROUTE, ADMIN_CHAT, ADMIN_ROUTE, BASKET_ROUTE, CREATE_DEVICE_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, USER_CHAT } from '../utils/consts';
 import DevicePage from '../pages/DevicePage';
 import UserChat from '../pages/UserChat';
 import AdminChat from '../pages/AdminChat';
+import About from '../pages/About';
 
 export const authRoutes = [
   {
@@ -49,4 +50,8 @@ export const publicRoutes = [
     path: '/product/:id',
     Component: DevicePage
   },
+  {
+    path: ABOUT_ROUTE,
+    Component: About
+  }
 ];

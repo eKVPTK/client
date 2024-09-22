@@ -1,4 +1,3 @@
-// src/routes.js
 import Admin from './pages/Admin';
 import Auth from './pages/Auth';
 import Basket from './pages/Basket';
@@ -7,8 +6,10 @@ import DevicePage from './pages/DevicePage';
 import CreateDevice from './pages/CreateDevice';
 import AdminChat from './pages/AdminChat';
 import UserChat from './pages/UserChat';
+import About from './pages/About';
+import { Component } from 'react';
+import Agreement from './components/Agreement';
 
-// Маршруты для авторизованных пользователей
 export const authRoutes = [
   { path: '/admin', Component: Admin },
   { path: '/basket', Component: Basket },
@@ -17,10 +18,11 @@ export const authRoutes = [
   { path: '/adminchat', Component: AdminChat },
 ];
 
-// Публичные маршруты
 export const publicRoutes = [
   { path: '/', Component: Shop },
   { path: '/login', Component: Auth },
   { path: '/register', Component: Auth },
-  { path: '/device/:id', Component: DevicePage }
+  { path: '/device/:id', Component: DevicePage },
+  { path: '/about', Component: About},
+  { path: '/agreement', Component: Agreement}
 ];

@@ -7,3 +7,5 @@ export const CREATE_DEVICE_ROUTE = "/create"
 export const DEVICE_ROUTE = '/device'
 export const USER_CHAT = '/chat'
 export const ADMIN_CHAT = '/adminchat'
+export const ABOUT_ROUTE = '/about'
+export const AGREEMENT_ROUTE = '/agreement'
