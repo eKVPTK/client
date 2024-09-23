@@ -1,6 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, CREATE_DEVICE_ROUTE, ADMIN_ROUTE, BASKET_ROUTE, ABOUT_ROUTE } from '../utils/consts';
+import {
+  LOGIN_ROUTE,
+  REGISTRATION_ROUTE,
+  SHOP_ROUTE,
+  CREATE_DEVICE_ROUTE,
+  ADMIN_ROUTE,
+  BASKET_ROUTE,
+  ABOUT_ROUTE,
+} from '../utils/consts';
 import { useUserStore } from '../store/UserStore';
 import anime from 'animejs';
 
@@ -26,11 +34,9 @@ const Header = () => {
 
   return (
     <header ref={headerRef} className="bg-white border-b border-gray-200 shadow-sm py-3">
-      <div className="container mx-auto flex justify-between items-center">
-        <span className="text-3xl font-bold text-blue-600">OptiTradeHub</span>
-
-        {/* Навигация */}
-        <nav className="flex space-x-6">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+        {/* Ссылки вместо логотипа */}
+        <div className="flex flex-wrap justify-center md:justify-start space-x-2 md:space-x-6">
           <NavLink to={SHOP_ROUTE} className="text-gray-700 hover:text-blue-600">
             Главная
           </NavLink>
@@ -52,9 +58,9 @@ const Header = () => {
               Панель Администратора
             </NavLink>
           )}
-        </nav>
+        </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 mt-2 md:mt-0">
           {!user.isAuth ? (
             <>
               <NavLink to={LOGIN_ROUTE} className="text-gray-700 hover:text-blue-600">

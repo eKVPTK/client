@@ -16,13 +16,14 @@ const Auth = () => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
+    const [agreeToPolicy, setAgreeToPolicy] = useState(false); // Чекбокс согласия
 
     const isEmailValid = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     };
 
-    const phonePattern = /^((\+7)|8)?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}$/;
+    const phonePattern = /^((\+7)|8)?\s?\(?\д{3}\)?[\с.-]?\д{3}[\с.-]?\д{2}[\с.-]?\д{2}$/;
 
     const click = async () => {
         try {
@@ -32,7 +33,6 @@ const Auth = () => {
                     setError('Некорректный email');
                     return;
                 } else {
-                
                     data = await login(email, password);
                 }
             } else {
@@ -48,11 +48,13 @@ const Auth = () => {
                 } else if (!phonePattern.test(phone)) {
                     setError('Некорректный телефон');
                     return;
+                } else if (!agreeToPolicy) {
+                    setError('Вы должны согласиться с политикой конфиденциальности');
+                    return;
                 } else {
                     data = await registration(name, phone, email, password, role);
                 }
             }
-
            
             setUserLogin(data.role);  
             navigate(SHOP_ROUTE);
@@ -62,48 +64,87 @@ const Auth = () => {
     };
 
     return (
-        <div>
-            <h2>{isLogin ? 'Авторизация' : "Регистрация"}</h2>
-            {error && <span>{error}</span>}
-            <input
-                placeholder="Введите ваш email..."
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                type="email"
-            />
-            <input
-                placeholder="Введите ваш пароль..."
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                type="password"
-            />
-            {!isLogin && (
-                <>
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <div className="bg-white p-8 rounded shadow-lg w-full max-w-md">
+                <h2 className="text-2xl font-bold mb-6 text-center">
+                    {isLogin ? 'Авторизация' : 'Регистрация'}
+                </h2>
+                {error && (
+                    <div className="text-red-500 text-sm mb-4">
+                        {error}
+                    </div>
+                )}
+                <div className="space-y-4">
                     <input
-                        placeholder="Введите ваше имя..."
-                        value={name}
-                        onChange={e => setName(e.target.value)}
+                        placeholder="Введите ваш email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        type="email"
+                        className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
                     />
                     <input
-                        placeholder="Введите ваш номер телефона..."
-                        value={phone}
-                        onChange={e => setPhone(e.target.value)}
+                        placeholder="Введите ваш пароль"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        type="password"
+                        className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
                     />
-                    <select value={role} onChange={e => setRole(e.target.value)}>
-                        <option value="USER">Покупатель</option>
-                        <option value="SUPPLIER">Поставщик</option>
-                        <option value="ADMIN">Администратор</option>
-                    </select>
-                </>
-            )}
-            <button onClick={click}>
-                {isLogin ? 'Войти' : 'Зарегистрироваться'}
-            </button>
-            {isLogin ? (
-                <div>Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйтесь!</NavLink></div>
-            ) : (
-                <div>Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink></div>
-            )}
+                    {!isLogin && (
+                        <>
+                            <input
+                                placeholder="Введите ваше имя"
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+                            />
+                            <input
+                                placeholder="Введите ваш номер телефона"
+                                value={phone}
+                                onChange={e => setPhone(e.target.value)}
+                                className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+                            />
+                            <select
+                                value={role}
+                                onChange={e => setRole(e.target.value)}
+                                className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+                            >
+                                <option value="USER">Покупатель</option>
+                                <option value="SUPPLIER">Поставщик</option>
+                                <option value="ADMIN">Администратор</option>
+                            </select>
+
+                            <div className="mt-4">
+                                <label className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={agreeToPolicy}
+                                        onChange={e => setAgreeToPolicy(e.target.checked)}
+                                        className="mr-2"
+                                    />
+                                    <span>Я согласен с <NavLink to="/agreement" className="text-blue-500 hover:underline">политикой конфиденциальности</NavLink></span>
+                                </label>
+                            </div>
+                        </>
+                    )}
+                </div>
+                <button
+                    onClick={click}
+                    className="w-full bg-blue-500 text-white py-2 rounded mt-6 hover:bg-blue-600 transition duration-200"
+                >
+                    {isLogin ? 'Войти' : 'Зарегистрироваться'}
+                </button>
+                <div className="text-center mt-4">
+                    {isLogin ? (
+                        <div>
+                            Нет аккаунта? <NavLink to={REGISTRATION_ROUTE} className="text-blue-500 hover:underline">Зарегистрируйтесь!</NavLink>
+                        </div>
+                    ) : (
+                        <div>
+                            Есть аккаунт? <NavLink to={LOGIN_ROUTE} className="text-blue-500 hover:underline">Войдите!</NavLink>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };

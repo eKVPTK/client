@@ -21,19 +21,21 @@ const Footer = () => {
             </div>
 
             <footer className="bg-gray-100 py-4 mt-2">
-                <div className="container mx-auto flex justify-center space-x-6">
-                    <NavLink to={AGREEMENT_ROUTE} className="text-gray-600 hover:text-orange-500 transition">
-                        Политика конфиденциальности
-                    </NavLink>
-                    <NavLink to="/terms" className="text-gray-600 hover:text-orange-500 transition">
-                        Условия использования
-                    </NavLink>
-                    <NavLink to="/contact" className="text-gray-600 hover:text-orange-500 transition">
-                        Контакты
-                    </NavLink>
-                </div>
-                <div className="text-center text-gray-500 mt-2">
-                    <p>&copy; {new Date().getFullYear()} MyMarket. Все права защищены.</p>
+                <div className="container mx-auto flex flex-col items-center space-y-2">
+                    <div className="flex flex-wrap justify-center space-x-6">
+                        <NavLink to={AGREEMENT_ROUTE} className="text-gray-600 hover:text-orange-500 transition">
+                            Политика конфиденциальности
+                        </NavLink>
+                        <NavLink to="/terms" className="text-gray-600 hover:text-orange-500 transition">
+                            Условия использования
+                        </NavLink>
+                        <NavLink to="/contact" className="text-gray-600 hover:text-orange-500 transition">
+                            Контакты
+                        </NavLink>
+                    </div>
+                    <div className="text-center text-gray-500 mt-2">
+                        <p>&copy; {new Date().getFullYear()} OptiTradeHub. Все права защищены.</p>
+                    </div>
                 </div>
             </footer>
         </div>

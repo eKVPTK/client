@@ -67,7 +67,7 @@ const Shop = observer(() => {
 
   return (
     <div className="shop container mx-auto py-8 px-4">
-      <header className="flex flex-col md:flex-row mb-6 items-center justify-between">
+     <header className="flex flex-col md:flex-row mb-6 items-center justify-between">
         <div className="text-4xl font-bold text-blue-600 mr-4">Логотип</div>
         <div className="flex items-center w-full">
           <div className="relative w-full">
@@ -77,7 +77,7 @@ const Shop = observer(() => {
               placeholder="Поиск товаров..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="border border-gray-300 rounded-full pl-10 p-4 w-full h-12 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-black rounded-full pl-10 p-4 w-full h-12 shadow focus:outline-none"
             />
           </div>
           <button className="bg-blue-600 text-white rounded-full ml-2 px-6 h-12 hover:bg-blue-700 transition duration-200">
@@ -150,7 +150,7 @@ const Shop = observer(() => {
               <button
                 key={brand.id}
                 onClick={() => handleBrandChange(brand.id)}
-                className={`border border-gray-300 px-4 py-2 mb-2 ${selectedBrand === brand.id ? 'font-bold' : ''} hover:underline`}
+                className={`border border-gray-300 px-6 py-4 mb-2 ml-2 ${selectedBrand === brand.id ? 'font-bold' : ''} hover:underline`}
               >
                 {brand.name}
               </button>

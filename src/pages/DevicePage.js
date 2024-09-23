@@ -167,12 +167,16 @@
 // };
 
 // export default DevicePage;
+
+// <p>{comment.text}</p>
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchDeviceById, updateDevice, deleteDevice } from '../http/deviceAPI';
 import { addToBasket, checkDeviceInBasket } from '../http/basketAPI';
 import { getUserIdFromToken } from '../utils/auth';
 import { addComment, editComment, deleteComment, getCommentsByDeviceId } from '../http/commentAPI';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faPlusCircle, faComment } from '@fortawesome/free-solid-svg-icons';
 
 const DevicePage = () => {
   const { id } = useParams();
@@ -184,8 +188,8 @@ const DevicePage = () => {
   const [editCommentId, setEditCommentId] = useState(null);
   const [editCommentText, setEditCommentText] = useState('');
   const [isSupplier, setIsSupplier] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // Состояние для управления режимом редактирования
-  const [editedDevice, setEditedDevice] = useState({}); // Состояние для хранения редактируемых данных
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedDevice, setEditedDevice] = useState({});
 
   const userId = getUserIdFromToken();
 
@@ -194,7 +198,7 @@ const DevicePage = () => {
       try {
         const deviceData = await fetchDeviceById(id);
         setDevice(deviceData);
-        setEditedDevice(deviceData); // Устанавливаем начальные значения для редактирования
+        setEditedDevice(deviceData);
         if (deviceData && deviceData.userId === userId) {
           setIsSupplier(true);
         }
@@ -263,8 +267,8 @@ const DevicePage = () => {
       try {
         await updateDevice(id, editedDevice);
         alert('Устройство обновлено успешно!');
-        setDevice(editedDevice); // Обновляем состояние устройства новыми данными
-        setIsEditing(false); // Выключаем режим редактирования
+        setDevice(editedDevice);
+        setIsEditing(false);
       } catch (error) {
         console.error('Ошибка при обновлении устройства:', error);
       }
@@ -280,17 +284,16 @@ const DevicePage = () => {
 
   const handleAddComment = async () => {
     if (newComment.trim()) {
-        try {
-            await addComment(userId, id, newComment); 
-            setNewComment('');
-            const updatedComments = await getCommentsByDeviceId(id);
-            setComments(updatedComments);
-        } catch (error) {
-            console.error('Ошибка при добавлении комментария:', error);
-        }
+      try {
+        await addComment(userId, id, newComment);
+        setNewComment('');
+        const updatedComments = await getCommentsByDeviceId(id);
+        setComments(updatedComments);
+      } catch (error) {
+        console.error('Ошибка при добавлении комментария:', error);
+      }
     }
-};
-
+  };
 
   const handleEditComment = async (commentId) => {
     if (editCommentText.trim()) {
@@ -317,99 +320,90 @@ const DevicePage = () => {
   };
 
   return (
-    <div>
-      {device ? (
-        <>
-          {isEditing ? (
-            <>
-              <input
-                type="text"
-                name="name"
-                value={editedDevice.name || ''}
-                onChange={handleChange}
-                placeholder="Название устройства"
-              />
-              <input
-                type="text"
-                name="price"
-                value={editedDevice.price || ''}
-                onChange={handleChange}
-                placeholder="Цена устройства"
-              />
-              <input
-                type="text"
-                name="description"
-                value={editedDevice.description || ''}
-                onChange={handleChange}
-                placeholder="Описание устройства"
-              />
-              <input
-                type="text"
-                name="phone"
-                value={editedDevice.phone || ''}
-                onChange={handleChange}
-                placeholder="Контактный телефон"
-              />
-            </>
-          ) : (
-            <>
-              <img src={'http://localhost:5000/' + device.img} alt={device.name} style={{ width: '300px', height: '300px', objectFit: 'cover' }}  />
-              <h1>{device.name}</h1>
-              <p>Цена: {device.price}</p>
-              <p>Описание: {device.description}</p>
-              <p>Телефон: {device.phone}</p>
-            </>
-          )}
-          {isSupplier && (
-            <div>
-              <button onClick={handleEditDevice}>
-                {isEditing ? 'Сохранить изменения' : 'Редактировать'}
-              </button>
-              <button onClick={handleDeleteDevice}>Удалить</button>
-            </div>
-          )}
-          {!isInBasket && (
-            <button onClick={handleAddToBasket}>Добавить в корзину</button>
-          )}
-          <div>
-            <h2>Комментарии</h2>
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Добавьте комментарий"
-            />
-            <button onClick={handleAddComment}>Добавить комментарий</button>
-            {comments.map((comment) => (
-              <div key={comment.id}>
-                {editCommentId === comment.id ? (
-                  <>
-                    <textarea
-                      value={editCommentText}
-                      onChange={(e) => setEditCommentText(e.target.value)}
-                    />
-                    <button onClick={() => handleEditComment(comment.id)}>Сохранить</button>
-                    <button onClick={() => setEditCommentId(null)}>Отменить</button>
-                  </>
-                ) : (
-                  <>
-                    <p>{comment.text}</p>
-                    {comment.userId === userId && (
-                      <>
-                        <button onClick={() => { setEditCommentId(comment.id); setEditCommentText(comment.text); }}>
-                          Редактировать
-                        </button>
-                        <button onClick={() => handleDeleteComment(comment.id)}>Удалить</button>
-                      </>
-                    )}
-                  </>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', backgroundColor: '#f9f9f9' }}>
+      <div style={{ maxWidth: '1550px', margin: '0 auto', padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }}>
+        {device ? (
+          <>
+            <div style={{ display: 'flex', marginBottom: '20px' }}>
+              <img src={'http://localhost:5000/' + device.img} alt={device.name} style={{ width: '300px', height: '300px', objectFit: 'cover', borderRadius: '10px', marginRight: '20px' }} />
+              <div style={{ flex: 1 }}>
+                <h1 style={{ fontSize: '26px', color: '#333', marginBottom: '10px' }}>{device.name}</h1>
+                <p style={{ fontSize: '20px', color: '#555', fontWeight: 'bold' }}>Цена: {device.price}₸</p>
+                <p style={{ margin: '10px 0', color: '#666', lineHeight: '1.5' }}>Описание: {device.description}</p>
+                <p style={{ color: '#666', marginBottom: '20px' }}>Телефон: {device.phone}</p>
+                {isSupplier && (
+                  <div>
+                    <button onClick={handleEditDevice} style={{ marginRight: '10px', padding: '10px 15px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                      <FontAwesomeIcon icon={faEdit} style={{ marginRight: '5px' }} />
+                      {isEditing ? 'Сохранить изменения' : 'Редактировать'}
+                    </button>
+                    <button onClick={handleDeleteDevice} style={{ padding: '10px 15px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                      <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
+                      Удалить
+                    </button>
+                  </div>
+                )}
+                {!isInBasket && (
+                  <button onClick={handleAddToBasket} style={{ marginTop: '20px', padding: '10px 15px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                    <FontAwesomeIcon icon={faPlusCircle} style={{ marginRight: '5px' }} />
+                    Добавить в корзину
+                  </button>
                 )}
               </div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <p>Загрузка...</p>
-      )}
+            </div>
+            <div style={{ marginTop: '30px' }}>
+              <h2 style={{ fontSize: '22px', marginBottom: '10px', color: '#333' }}>Комментарии</h2>
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Добавьте комментарий"
+                style={{ width: '100%', height: '80px', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '16px' }}
+              />
+              <button onClick={handleAddComment} style={{ padding: '10px 15px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                <FontAwesomeIcon icon={faComment} style={{ marginRight: '5px' }} />
+                Добавить комментарий
+              </button>
+              {comments.map((comment) => (
+                <div key={comment.id} style={{ margin: '10px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '5px', backgroundColor: '#f1f1f1' }}>
+                  {editCommentId === comment.id ? (
+                    <>
+                      <textarea
+                        value={editCommentText}
+                        onChange={(e) => setEditCommentText(e.target.value)}
+                        style={{ width: '100%', height: '60px', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '16px' }}
+                      />
+                      <button onClick={() => handleEditComment(comment.id)} style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                        Сохранить
+                      </button>
+                      <button onClick={() => setEditCommentId(null)} style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                        Отменить
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <p style={{ margin: '0', fontSize: '16px' }}>{comment.text}</p>
+                      {comment.userId === userId && (
+                        <div style={{ marginTop: '10px' }}>
+                          <button onClick={() => { setEditCommentId(comment.id); setEditCommentText(comment.text); }} style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                            <FontAwesomeIcon icon={faEdit} style={{ marginRight: '5px' }} />
+                            Редактировать
+                          </button>
+                          <button onClick={() => handleDeleteComment(comment.id)} style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                            <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
+                            Удалить
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>Загрузка...</p>
+        )}
+      </div>
     </div>
   );
 };
