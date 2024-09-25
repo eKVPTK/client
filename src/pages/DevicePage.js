@@ -320,91 +320,93 @@ const DevicePage = () => {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', backgroundColor: '#f9f9f9' }}>
-      <div style={{ maxWidth: '1550px', margin: '0 auto', padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }}>
-        {device ? (
-          <>
-            <div style={{ display: 'flex', marginBottom: '20px' }}>
-              <img src={'http://localhost:5000/' + device.img} alt={device.name} style={{ width: '300px', height: '300px', objectFit: 'cover', borderRadius: '10px', marginRight: '20px' }} />
-              <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: '26px', color: '#333', marginBottom: '10px' }}>{device.name}</h1>
-                <p style={{ fontSize: '20px', color: '#555', fontWeight: 'bold' }}>Цена: {device.price}₸</p>
-                <p style={{ margin: '10px 0', color: '#666', lineHeight: '1.5' }}>Описание: {device.description}</p>
-                <p style={{ color: '#666', marginBottom: '20px' }}>Телефон: {device.phone}</p>
-                {isSupplier && (
-                  <div>
-                    <button onClick={handleEditDevice} style={{ marginRight: '10px', padding: '10px 15px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                      <FontAwesomeIcon icon={faEdit} style={{ marginRight: '5px' }} />
-                      {isEditing ? 'Сохранить изменения' : 'Редактировать'}
-                    </button>
-                    <button onClick={handleDeleteDevice} style={{ padding: '10px 15px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                      <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
-                      Удалить
-                    </button>
-                  </div>
-                )}
-                {!isInBasket && (
-                  <button onClick={handleAddToBasket} style={{ marginTop: '20px', padding: '10px 15px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                    <FontAwesomeIcon icon={faPlusCircle} style={{ marginRight: '5px' }} />
-                    Добавить в корзину
-                  </button>
-                )}
-              </div>
-            </div>
-            <div style={{ marginTop: '30px' }}>
-              <h2 style={{ fontSize: '22px', marginBottom: '10px', color: '#333' }}>Комментарии</h2>
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Добавьте комментарий"
-                style={{ width: '100%', height: '80px', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '16px' }}
-              />
-              <button onClick={handleAddComment} style={{ padding: '10px 15px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                <FontAwesomeIcon icon={faComment} style={{ marginRight: '5px' }} />
-                Добавить комментарий
+    <div style={{ padding: '10px', fontFamily: 'Arial, sans-serif', backgroundColor: '#f9f9f9' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }}>
+      {device ? (
+        <>
+          <div style={{ display: 'flex', marginBottom: '20px' }}>
+            <img
+              src={'http://localhost:5000/' + device.img}
+              alt={device.name}
+              style={{ width: '350px', height: '350px', objectFit: 'cover', borderRadius: '10px', marginRight: '20px' }}
+            />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <h1 style={{ fontSize: '28px', color: '#333', marginBottom: '10px', fontWeight: 'bold' }}>{device.name}</h1>
+              <p style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>Цена: {device.price}₸</p>
+
+              {/* Номер поставщика */}
+              <span style={{ display: 'block', fontSize: '18px', margin: '10px 0', color: '#555', fontWeight: 'normal' }}>
+                Номер поставщика: <br />
+                <span style={{ color: '#007bff', fontWeight: 'bold' }}>{device.phone}</span>
+              </span>
+
+              {/* Кнопка Добавить в корзину */}
+              <button
+                onClick={handleAddToBasket}
+                style={{
+                  marginTop: '10px',
+                  padding: '12px 18px',
+                  backgroundColor: '#28a745',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  transition: 'background-color 0.3s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#218838')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#28a745')}
+              >
+                <FontAwesomeIcon icon={faPlusCircle} style={{ marginRight: '5px' }} />
+                Добавить в корзину
               </button>
-              {comments.map((comment) => (
-                <div key={comment.id} style={{ margin: '10px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '5px', backgroundColor: '#f1f1f1' }}>
-                  {editCommentId === comment.id ? (
-                    <>
-                      <textarea
-                        value={editCommentText}
-                        onChange={(e) => setEditCommentText(e.target.value)}
-                        style={{ width: '100%', height: '60px', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '16px' }}
-                      />
-                      <button onClick={() => handleEditComment(comment.id)} style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                        Сохранить
-                      </button>
-                      <button onClick={() => setEditCommentId(null)} style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                        Отменить
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <p style={{ margin: '0', fontSize: '16px' }}>{comment.text}</p>
-                      {comment.userId === userId && (
-                        <div style={{ marginTop: '10px' }}>
-                          <button onClick={() => { setEditCommentId(comment.id); setEditCommentText(comment.text); }} style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                            <FontAwesomeIcon icon={faEdit} style={{ marginRight: '5px' }} />
-                            Редактировать
-                          </button>
-                          <button onClick={() => handleDeleteComment(comment.id)} style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                            <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
-                            Удалить
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
             </div>
-          </>
-        ) : (
-          <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>Загрузка...</p>
-        )}
-      </div>
+          </div>
+
+  
+          {/* Описание и характеристики товара */}
+          <div style={{ marginTop: '30px' }}>
+            <h2 style={{ fontSize: '20px', marginBottom: '10px', color: '#333' }}>Описание товара</h2>
+            <p style={{ margin: '10px 0', color: '#666', lineHeight: '1.5' }}>{device.description}</p>
+            
+            {/* Характеристики */}
+            <h4 style={{ fontSize: '18px', margin: '20px 0 10px', color: '#333' }}>Характеристики</h4>
+            {device.info.map((info) => (
+              <div key={info.id} style={{ marginBottom: '5px', color: '#555' }}>
+                <strong>{info.title}:</strong> {info.description}
+              </div>
+            ))}
+          </div>
+  
+          {/* Комментарии */}
+          <div style={{ marginTop: '30px' }}>
+            <h2 style={{ fontSize: '20px', marginBottom: '10px', color: '#333' }}>Комментарии</h2>
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Добавьте комментарий"
+              style={{ width: '100%', height: '80px', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '16px' }}
+            />
+            <button onClick={handleAddComment} style={{ padding: '10px 15px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+              <FontAwesomeIcon icon={faComment} style={{ marginRight: '5px' }} />
+              Добавить комментарий
+            </button>
+            {comments.map((comment) => (
+              <div key={comment.id} style={{ margin: '10px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '5px', backgroundColor: '#f1f1f1' }}>
+                <p style={{ margin: '0', fontSize: '16px' }}>{comment.text}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>Загрузка...</p>
+      )}
     </div>
+  </div>
+  
+  
+  
   );
 };
 

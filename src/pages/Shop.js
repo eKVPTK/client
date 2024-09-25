@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchDevices, fetchBrands, fetchTypes } from '../http/deviceAPI';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
-import { FaSearch, FaList, FaTh, FaInfoCircle } from 'react-icons/fa';
+import { FaSearch, FaList, FaTh, FaInfoCircle, FaCaretDown } from 'react-icons/fa';
 
 const Shop = observer(() => {
   const [devices, setDevices] = useState([]);
@@ -13,6 +13,7 @@ const Shop = observer(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState('list');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Состояние для выпадающего меню
   const limit = 9;
   const descriptionWordLimit = 40;
 
@@ -41,6 +42,7 @@ const Shop = observer(() => {
   const handleTypeChange = (typeId) => {
     setSelectedType(typeId);
     setPage(1);
+    setIsDropdownOpen(false); 
   };
 
   const handleSearchChange = (event) => {
@@ -52,8 +54,14 @@ const Shop = observer(() => {
     if (newPage >= 1) setPage(newPage);
   };
 
-  const truncateDescription = (description, wordLimit) => {
+  const getDescriptionLimit = () => {
+    const isMobile = window.innerWidth < 768; 
+    return isMobile ? 20 : 40; 
+  };
+
+  const truncateDescription = (description) => {
     const words = description.split(' ');
+    const wordLimit = getDescriptionLimit();
     if (words.length > wordLimit) {
       return words.slice(0, wordLimit).join(' ') + '...';
     }
@@ -66,25 +74,24 @@ const Shop = observer(() => {
   );
 
   return (
-    <div className="shop container mx-auto py-8 px-4">
+    <div className="shop container mx-auto py-8 px-4"> {/* Убедитесь, что классы Tailwind CSS или ваши собственные стили определены */}
      <header className="flex flex-col md:flex-row mb-6 items-center justify-between">
-        <div className="text-4xl font-bold text-blue-600 mr-4">Логотип</div>
+        <div className="text-4xl font-bold text-blue-600 mr-4 mb-4 md:mb-0">Логотип</div>
         <div className="flex items-center w-full">
-          <div className="relative w-full">
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Поиск товаров..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="border border-black rounded-full pl-10 p-4 w-full h-12 shadow focus:outline-none"
-            />
-          </div>
-          <button className="bg-blue-600 text-white rounded-full ml-2 px-6 h-12 hover:bg-blue-700 transition duration-200">
-            Искать
-          </button>
+            <div className="relative w-full">
+                <input
+                    type="text"
+                    placeholder="Поиск товаров..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="border border-black rounded-full pl-4 p-4 w-full h-12 shadow focus:outline-none"
+                />
+            </div>
+            <button className="bg-blue-600 text-white rounded-full ml-2 w-12 h-12 flex items-center justify-center hover:bg-blue-700 transition duration-200">
+                <FaSearch />
+            </button>
         </div>
-      </header>
+    </header>
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
         <h2 className="text-3xl font-semibold text-gray-800">
@@ -115,26 +122,62 @@ const Shop = observer(() => {
       <div className="flex flex-col md:flex-row">
         <aside className="md:w-1/5 mb-4 md:mr-6">
           <h3 className="text-xl font-semibold mb-4 text-gray-700">Типы</h3>
-          <ul className="border rounded-lg p-4 bg-gray-50 shadow-sm">
-            <li className="mb-3">
-              <button
-                onClick={() => handleTypeChange(null)}
-                className={`w-full text-left hover:bg-gray-100 rounded-lg p-2 ${selectedType === null ? 'bg-blue-100 font-bold' : ''}`}
-              >
-                Все типы
-              </button>
-            </li>
-            {types.map(type => (
-              <li key={type.id} className="mb-3">
+
+          {/* Выпадающее меню для мобильных устройств */}
+          <div className="block md:hidden">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full text-left bg-gray-200 rounded-lg p-2 flex justify-between items-center hover:bg-gray-300"
+            >
+              {selectedType ? types.find(type => type.id === selectedType)?.name : 'Выберите тип'} <FaCaretDown />
+            </button>
+            {isDropdownOpen && (
+              <ul className="border rounded-lg p-4 bg-gray-50 shadow-sm mt-2">
+                <li className="mb-3">
+                  <button
+                    onClick={() => handleTypeChange(null)}
+                    className={`w-full text-left hover:bg-gray-100 rounded-lg p-2 ${selectedType === null ? 'bg-blue-100 font-bold' : ''}`}
+                  >
+                    Все типы
+                  </button>
+                </li>
+                {types.map(type => (
+                  <li key={type.id} className="mb-3">
+                    <button
+                      onClick={() => handleTypeChange(type.id)}
+                      className={`w-full text-left hover:bg-gray-100 rounded-lg p-2 ${selectedType === type.id ? 'bg-blue-100 font-bold' : ''}`}
+                    >
+                      {type.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Список типов для настольных устройств */}
+          <div className="hidden md:block">
+            <ul className="border rounded-lg p-4 bg-gray-50 shadow-sm">
+              <li className="mb-3">
                 <button
-                  onClick={() => handleTypeChange(type.id)}
-                  className={`w-full text-left hover:bg-gray-100 rounded-lg p-2 ${selectedType === type.id ? 'bg-blue-100 font-bold' : ''}`}
+                  onClick={() => handleTypeChange(null)}
+                  className={`w-full text-left hover:bg-gray-100 rounded-lg p-2 ${selectedType === null ? 'bg-blue-100 font-bold' : ''}`}
                 >
-                  {type.name}
+                  Все типы
                 </button>
               </li>
-            ))}
-          </ul>
+              {types.map(type => (
+                <li key={type.id} className="mb-3">
+                  <button
+                    onClick={() => handleTypeChange(type.id)}
+                    className={`w-full text-left hover:bg-gray-100 rounded-lg p-2 ${selectedType === type.id ? 'bg-blue-100 font-bold' : ''}`}
+                  >
+                    {type.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </aside>
 
         <main className="md:w-4/5">
@@ -157,6 +200,7 @@ const Shop = observer(() => {
             ))}
           </div>
 
+          
           <div className={`device-list ${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6' : ''}`}>
             {filteredDevices.length === 0 ? (
               <p className="text-center text-gray-500">Товаров пока нет!</p>
@@ -165,6 +209,7 @@ const Shop = observer(() => {
                 <div
                   key={device.id}
                   className={`device-item border rounded-lg shadow-lg hover:shadow-xl transition duration-200 mb-6 bg-white p-4 ${viewMode === 'grid' ? '' : 'flex items-center'}`}
+                  style={styles.deviceItem(viewMode)}
                 >
                   <div className="flex-shrink-0">
                     <img
@@ -191,21 +236,41 @@ const Shop = observer(() => {
             )}
           </div>
 
-          {filteredDevices.length > 0 && (
-            <div className="pagination mt-6 flex justify-between">
-              <button onClick={() => handlePageChange(page - 1)} disabled={page === 1} className="bg-gray-300 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-400 transition duration-200">
-                Предыдущая
-              </button>
-              <button onClick={() => handlePageChange(page + 1)} className="bg-gray-300 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-400 transition duration-200">
-                Следующая
-              </button>
-            </div>
-          )}
+
+          {/* Кнопки навигации по страницам */}
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+              className="border border-gray-300 px-4 py-2 rounded-lg disabled:opacity-50"
+            >
+              Назад
+            </button>
+            <button
+              onClick={() => handlePageChange(page + 1)}
+              disabled={filteredDevices.length < limit}
+              className="border border-gray-300 px-4 py-2 rounded-lg disabled:opacity-50"
+            >
+              Вперед
+            </button>
+          </div>
         </main>
       </div>
     </div>
   );
 });
 
-export default Shop;
+const styles = {
+  container: {
+    backgroundColor: '#f7f7f7',
+  },
+  deviceItem: (viewMode) => ({
+    transition: 'transform 0.2s',
+    transform: viewMode === 'grid' ? 'none' : 'scale(1)',
+    '&:hover': {
+      transform: 'scale(1.05)',
+    },
+  }),
+};
 
+export default Shop;
