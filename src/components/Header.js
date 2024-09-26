@@ -8,6 +8,7 @@ import {
   ADMIN_ROUTE,
   BASKET_ROUTE,
   ABOUT_ROUTE,
+  NOTIFICATION,
 } from '../utils/consts';
 import { useUserStore } from '../store/UserStore';
 import anime from 'animejs';
@@ -64,6 +65,9 @@ const Header = () => {
         <div className="hidden md:flex flex-wrap justify-center md:justify-start space-x-2 md:space-x-6">
           <NavLink to={SHOP_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
             Главная
+          </NavLink>
+          <NavLink to={NOTIFICATION} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
+          Уведомления 
           </NavLink>
           <NavLink to={ABOUT_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
             О нас
@@ -126,6 +130,13 @@ const Header = () => {
             onClick={toggleMenu}
           >
             Главная
+          </NavLink>
+          <NavLink
+            to={NOTIFICATION}
+            className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
+            onClick={toggleMenu}
+          >
+            Уведомления
           </NavLink>
           <NavLink
             to={ABOUT_ROUTE}

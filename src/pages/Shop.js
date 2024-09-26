@@ -76,22 +76,26 @@ const Shop = observer(() => {
   return (
     <div className="shop container mx-auto py-8 px-4"> {/* Убедитесь, что классы Tailwind CSS или ваши собственные стили определены */}
      <header className="flex flex-col md:flex-row mb-6 items-center justify-between">
-        <div className="text-4xl font-bold text-blue-600 mr-4 mb-4 md:mb-0">Логотип</div>
-        <div className="flex items-center w-full">
-            <div className="relative w-full">
-                <input
-                    type="text"
-                    placeholder="Поиск товаров..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className="border border-black rounded-full pl-4 p-4 w-full h-12 shadow focus:outline-none"
-                />
-            </div>
-            <button className="bg-blue-600 text-white rounded-full ml-2 w-12 h-12 flex items-center justify-center hover:bg-blue-700 transition duration-200">
-                <FaSearch />
-            </button>
-        </div>
-    </header>
+          <div className="text-4xl font-bold text-blue-600 mr-4 mb-4 md:mb-0">Логотип</div>
+          <div className="flex items-center w-full">
+              <div className="relative w-full">
+                  <input
+                      type="text"
+                      placeholder="Поиск товаров..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      className="border border-black rounded-full pl-4 p-4 w-full h-12 shadow focus:outline-none"
+                  />
+              </div>
+              <button 
+                  className="bg-blue-600 text-white rounded-full ml-2 w-12 h-12 flex items-center justify-center hover:bg-blue-700 transition duration-200"
+                  style={{ minWidth: '48px', minHeight: '48px' }} // Добавляем минимальные размеры
+              >
+                  <FaSearch />
+              </button>
+          </div>
+      </header>
+
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
         <h2 className="text-3xl font-semibold text-gray-800">

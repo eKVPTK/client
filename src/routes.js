@@ -9,6 +9,7 @@ import UserChat from './pages/UserChat';
 import About from './pages/About';
 import { Component } from 'react';
 import Agreement from './components/Agreement';
+import Notification from './pages/Notification';
 
 export const authRoutes = [
   { path: '/admin', Component: Admin },
@@ -24,5 +25,6 @@ export const publicRoutes = [
   { path: '/register', Component: Auth },
   { path: '/device/:id', Component: DevicePage },
   { path: '/about', Component: About},
-  { path: '/agreement', Component: Agreement}
+  { path: '/agreement', Component: Agreement},
+  { path: '/notification', Component: Notification}
 ];
