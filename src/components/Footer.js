@@ -1,9 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { AGREEMENT_ROUTE } from "../utils/consts";
 import { FaTelegramPlane, FaInstagram, FaTiktok } from "react-icons/fa"; // Импортируем иконки
 
 const Footer = () => {
+    const { t } = useTranslation(); // Инициализируем useTranslation
+
     return (
         <div>
             <div className="bg-gray-200 py-2">
@@ -24,17 +27,17 @@ const Footer = () => {
                 <div className="container mx-auto flex flex-col items-center space-y-2">
                     <div className="flex flex-wrap justify-center space-x-6">
                         <NavLink to={AGREEMENT_ROUTE} className="text-gray-600 hover:text-orange-500 transition">
-                            Политика конфиденциальности
+                            {t('privacyPolicy')} {/* Используем перевод */}
                         </NavLink>
                         <NavLink to="/terms" className="text-gray-600 hover:text-orange-500 transition">
-                            Условия использования
+                            {t('termsOfUse')} {/* Используем перевод */}
                         </NavLink>
                         <NavLink to="/contact" className="text-gray-600 hover:text-orange-500 transition">
-                            Контакты
+                            {t('contacts')} {/* Используем перевод */}
                         </NavLink>
                     </div>
                     <div className="text-center text-gray-500 mt-2">
-                        <p>&copy; {new Date().getFullYear()} OptiTradeHub. Все права защищены.</p>
+                        <p>&copy; {new Date().getFullYear()} OptiTradeHub. {t('allRightsReserved')}</p> {/* Используем перевод */}
                     </div>
                 </div>
             </footer>

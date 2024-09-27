@@ -177,6 +177,7 @@ import { getUserIdFromToken } from '../utils/auth';
 import { addComment, editComment, deleteComment, getCommentsByDeviceId } from '../http/commentAPI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlusCircle, faComment } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 
 const DevicePage = () => {
   const { id } = useParams();
@@ -190,6 +191,7 @@ const DevicePage = () => {
   const [isSupplier, setIsSupplier] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedDevice, setEditedDevice] = useState({});
+  const { t } = useTranslation();
 
   const userId = getUserIdFromToken();
 
@@ -365,7 +367,7 @@ const DevicePage = () => {
               flexDirection: 'column',
               marginBottom: '20px',
             }}>
-               <div style={styles.imageContainer}>
+              <div style={styles.imageContainer}>
                 <img
                   src={'http://localhost:5000/' + device.img}
                   alt={device.name}
@@ -392,7 +394,7 @@ const DevicePage = () => {
                   fontWeight: 'bold', 
                   marginBottom: '10px'
                 }}>
-                  Цена: {device.price}₸
+                  {t('Цена:')} {device.price}₸
                 </p>
 
                 <span style={{
@@ -402,7 +404,7 @@ const DevicePage = () => {
                   color: '#555', 
                   fontWeight: 'normal'
                 }}>
-                  Номер поставщика: <br />
+                  {t('Номер поставщика:')} <br />
                   <span style={{
                     color: '#007bff', 
                     fontWeight: 'bold'
@@ -430,7 +432,7 @@ const DevicePage = () => {
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#28a745')}
                 >
                   <FontAwesomeIcon icon={faPlusCircle} style={{ marginRight: '5px' }} />
-                  Добавить в корзину
+                  {t('Добавить в корзину')}
                 </button>
               </div>
             </div>
@@ -441,7 +443,7 @@ const DevicePage = () => {
                 marginBottom: '10px', 
                 color: '#333'
               }}>
-                Описание товара
+                {t('Описание товара')}
               </h2>
               <p style={{
                 margin: '10px 0', 
@@ -456,7 +458,7 @@ const DevicePage = () => {
                 margin: '20px 0 10px', 
                 color: '#333'
               }}>
-                Характеристики
+                {t('Характеристики')}
               </h4>
               {device.info.map((info) => (
                 <div key={info.id} style={{
@@ -505,7 +507,7 @@ const DevicePage = () => {
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isEditing ? '#ffc107' : '#007bff')}
                   >
                     <FontAwesomeIcon icon={faEdit} style={{ marginRight: '5px' }} />
-                    {isEditing ? 'Сохранить изменения' : 'Редактировать'}
+                    {isEditing ? t('Сохранить изменения') : t('Редактировать')}
                   </button>
                   <button
                     onClick={handleDeleteDevice}
@@ -518,195 +520,21 @@ const DevicePage = () => {
                       cursor: 'pointer',
                       fontSize: '14px',
                       fontWeight: 'bold',
-                      transition: 'background-color 0.3s',
+                      transition: 'background-color 0.3s'
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#c82333')}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#dc3545')}
                   >
                     <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
-                    Удалить устройство
+                    {t('Удалить устройство')}
                   </button>
                 </div>
-
-                {isEditing && (
-                  <div style={{ marginTop: '20px' }}>
-                    <label style={{ display: 'block', fontSize: '14px', color: '#333', marginBottom: '5px' }}>Название:</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={editedDevice.name || ''}
-                      onChange={handleChange}
-                      style={{
-                        width: '100%',
-                        padding: '10px',
-                        borderRadius: '5px',
-                        border: '1px solid #ccc',
-                        marginBottom: '10px',
-                        fontSize: '14px',
-                      }}
-                    />
-                    <label style={{ display: 'block', fontSize: '14px', color: '#333', marginBottom: '5px' }}>Описание:</label>
-                    <textarea
-                      name="description"
-                      value={editedDevice.description || ''}
-                      onChange={handleChange}
-                      rows="4"
-                      style={{
-                        width: '100%',
-                        padding: '10px',
-                        borderRadius: '5px',
-                        border: '1px solid #ccc',
-                        marginBottom: '10px',
-                        fontSize: '14px',
-                      }}
-                    />
-                    <label style={{ display: 'block', fontSize: '14px', color: '#333', marginBottom: '5px' }}>Цена:</label>
-                    <input
-                      type="text"
-                      name="price"
-                      value={editedDevice.price || ''}
-                      onChange={handleChange}
-                      style={{
-                        width: '100%',
-                        padding: '10px',
-                        borderRadius: '5px',
-                        border: '1px solid #ccc',
-                        marginBottom: '10px',
-                        fontSize: '14px',
-                      }}
-                    />
-                  </div>
-                )}
               </>
             )}
-            </>
+          </>
         ) : (
-          <p style={{ color: '#666' }}>Загрузка устройства...</p>
+          <p>{t('Загрузка...')}</p>
         )}
-        
-        {/* Комментарии */}
-        <div style={{ marginTop: '40px' }}>
-          <h3 style={{ fontSize: '20px', color: '#333', marginBottom: '15px' }}>Комментарии</h3>
-          {comments.length === 0 ? (
-            <p style={{ color: '#777' }}>Комментариев пока нет</p>
-          ) : (
-            comments.map((comment) => (
-              <div key={comment.id} style={{
-                borderBottom: '1px solid #eee', 
-                padding: '10px 0'
-              }}>
-                <div style={{
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center'
-                }}>
-                  <strong style={{ fontSize: '16px', color: '#555' }}>{comment.userName}</strong>
-                  {comment.userId === userId && (
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <button
-                        onClick={() => setEditCommentId(comment.id)}
-                        style={{
-                          backgroundColor: '#ffc107',
-                          color: '#fff',
-                          padding: '5px 10px',
-                          border: 'none',
-                          borderRadius: '5px',
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faEdit} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteComment(comment.id)}
-                        style={{
-                          backgroundColor: '#dc3545',
-                          color: '#fff',
-                          padding: '5px 10px',
-                          border: 'none',
-                          borderRadius: '5px',
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <p style={{ fontSize: '14px', color: '#666' }}>
-                  {editCommentId === comment.id ? (
-                    <>
-                      <textarea
-                        value={editCommentText}
-                        onChange={(e) => setEditCommentText(e.target.value)}
-                        rows="3"
-                        style={{
-                          width: '100%',
-                          padding: '10px',
-                          borderRadius: '5px',
-                          border: '1px solid #ccc',
-                          marginTop: '10px',
-                        }}
-                      />
-                      <button
-                        onClick={() => handleEditComment(comment.id)}
-                        style={{
-                          marginTop: '10px',
-                          backgroundColor: '#28a745',
-                          color: '#fff',
-                          padding: '8px 15px',
-                          border: 'none',
-                          borderRadius: '5px',
-                          fontSize: '14px',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        Сохранить
-                      </button>
-                    </>
-                  ) : (
-                    comment.text
-                  )}
-                </p>
-              </div>
-            ))
-          )}
-          <div style={{
-            marginTop: '20px', 
-            display: 'flex', 
-            flexDirection: 'column'
-          }}>
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              rows="3"
-              placeholder="Добавить комментарий..."
-              style={{
-                width: '100%',
-                padding: '10px',
-                borderRadius: '5px',
-                border: '1px solid #ccc',
-                marginBottom: '10px',
-              }}
-            />
-            <button
-              onClick={handleAddComment}
-              style={{
-                backgroundColor: '#007bff',
-                color: '#fff',
-                padding: '10px 15px',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontSize: '16px',
-              }}
-            >
-              <FontAwesomeIcon icon={faComment} style={{ marginRight: '5px' }} />
-              Добавить комментарий
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

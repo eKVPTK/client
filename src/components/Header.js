@@ -12,9 +12,11 @@ import {
 } from '../utils/consts';
 import { useUserStore } from '../store/UserStore';
 import anime from 'animejs';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
   const { user, logout } = useUserStore();
+  const { i18n, t } = useTranslation();
   const navigate = useNavigate();
   const headerRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,6 +28,10 @@ const Header = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
   };
 
   useEffect(() => {
@@ -64,56 +70,63 @@ const Header = () => {
         {/* Ссылки для настольных устройств */}
         <div className="hidden md:flex flex-wrap justify-center md:justify-start space-x-2 md:space-x-6">
           <NavLink to={SHOP_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-            Главная
+            {t('Главная')}
           </NavLink>
           <NavLink to={NOTIFICATION} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-          Уведомления 
+            {t('Уведомления')}
           </NavLink>
           <NavLink to={ABOUT_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-            О нас
+            {t('О нас')}
           </NavLink>
           {user.isAuth && (
             <NavLink to={BASKET_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-              Корзина
+              {t('Корзина')}
             </NavLink>
           )}
           {user.isAuth && user.role === 'SUPPLIER' && (
             <NavLink to={CREATE_DEVICE_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-              Создать товар
+              {t('Создать товар')}
             </NavLink>
           )}
           {user.isAuth && user.role === 'ADMIN' && (
             <NavLink to={ADMIN_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-              Панель Администратора
+              {t('Панель Администратора')}
             </NavLink>
           )}
         </div>
 
         <div className="flex items-center space-x-4">
+          {/* Меню языков */}
+          <div className="flex items-center space-x-4">
+            <button onClick={() => changeLanguage('ru')} className="text-gray-700 hover:text-blue-600 text-sm md:text-base">
+              RU
+            </button>
+            <button onClick={() => changeLanguage('kz')} className="text-gray-700 hover:text-blue-600 text-sm md:text-base">
+              KZ
+            </button>
+            <button onClick={() => changeLanguage('en')} className="text-gray-700 hover:text-blue-600 text-sm md:text-base">
+              EN
+            </button>
+          </div>
+
           {!user.isAuth ? (
             <>
               <NavLink to={LOGIN_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-                Вход
+                {t('Вход')}
               </NavLink>
               <NavLink to={REGISTRATION_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
-                Регистрация
+                {t('Регистрация')}
               </NavLink>
             </>
           ) : (
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 rounded-full bg-gray-300 flex justify-center items-center">
-                <span className="text-white text-lg">
-                  {user.username ? user.username[0].toUpperCase() : 'U'}
-                </span>
+                <span className="text-white text-lg">{user.username ? user.username[0].toUpperCase() : 'U'}</span>
               </div>
-
               <div className="text-gray-700 text-sm md:text-base">
                 <p className="font-semibold">{user.username}</p>
-                <button
-                  onClick={handleLogout}
-                  className="text-blue-600 hover:underline text-xs md:text-sm"
-                >
-                  Выйти
+                <button onClick={handleLogout} className="text-blue-600 hover:underline text-xs md:text-sm">
+                  {t('Выйти')}
                 </button>
               </div>
             </div>
@@ -129,21 +142,21 @@ const Header = () => {
             className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
             onClick={toggleMenu}
           >
-            Главная
+            {t('Главная')}
           </NavLink>
           <NavLink
             to={NOTIFICATION}
             className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
             onClick={toggleMenu}
           >
-            Уведомления
+            {t('Уведомления')}
           </NavLink>
           <NavLink
             to={ABOUT_ROUTE}
             className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
             onClick={toggleMenu}
           >
-            О нас
+            {t('О нас')}
           </NavLink>
           {user.isAuth && (
             <NavLink
@@ -151,7 +164,7 @@ const Header = () => {
               className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
               onClick={toggleMenu}
             >
-              Корзина
+              {t('Корзина')}
             </NavLink>
           )}
           {user.isAuth && user.role === 'SUPPLIER' && (
@@ -160,7 +173,7 @@ const Header = () => {
               className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
               onClick={toggleMenu}
             >
-              Создать товар
+              {t('Создать товар')}
             </NavLink>
           )}
           {user.isAuth && user.role === 'ADMIN' && (
@@ -169,7 +182,7 @@ const Header = () => {
               className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
               onClick={toggleMenu}
             >
-              Панель Администратора
+              {t('Панель Администратора')}
             </NavLink>
           )}
           {!user.isAuth ? (
@@ -179,14 +192,14 @@ const Header = () => {
                 className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
                 onClick={toggleMenu}
               >
-                Вход
+                {t('Вход')}
               </NavLink>
               <NavLink
                 to={REGISTRATION_ROUTE}
                 className="block text-gray-700 hover:text-blue-600 text-sm pl-4"
                 onClick={toggleMenu}
               >
-                Регистрация
+                {t('Регистрация')}
               </NavLink>
             </>
           ) : (
@@ -199,7 +212,7 @@ const Header = () => {
                 }}
                 className="text-blue-600 hover:underline text-xs"
               >
-                Выйти
+                {t('Выйти')}
               </button>
             </div>
           )}

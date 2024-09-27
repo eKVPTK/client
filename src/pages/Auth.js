@@ -22,8 +22,9 @@ const Auth = () => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     };
+    const phonePattern = /^(\+7|8)?\d{11}$/;
 
-    const phonePattern = /^((\+7)|8)?\s?\(?\д{3}\)?[\с.-]?\д{3}[\с.-]?\д{2}[\с.-]?\д{2}$/;
+
 
     const click = async () => {
         try {

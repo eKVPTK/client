@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { fetchBasket, removeFromBasket, updateBasketQuantity } from '../http/basketAPI'; 
 import { getUserIdFromToken } from '../utils/auth'; 
+import { useTranslation } from 'react-i18next';
 
 const Basket = () => {
+  const { t } = useTranslation(); 
   const [basketItems, setBasketItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -97,10 +99,10 @@ const Basket = () => {
 
   return (
     <div className="basket" style={{ padding: '20px', fontFamily: 'Arial, sans-serif', backgroundColor: '#f9f9f9', maxWidth: '800px', margin: '0 auto', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-      <h1 style={{ fontSize: '28px', color: '#333', marginBottom: '20px' }}>Корзина</h1>
+      <h1 style={{ fontSize: '28px', color: '#333', marginBottom: '20px' }}>{t("Basket")}</h1>
 
       {basketItems.length === 0 ? (
-        <p style={{ fontSize: '20px', color: '#666' }}>Ваша корзина пуста!</p>
+        <p style={{ fontSize: '20px', color: '#666' }}>{t("Your basket is empty!")}</p>
       ) : (
         <div className="basket-list">
           {basketItems.map(item => (
@@ -115,7 +117,7 @@ const Basket = () => {
                 <p style={{ fontSize: '16px', color: '#555', marginBottom: '5px' }}>
                   {truncateDescription(item.device.description, 20)} {/* Ограничение до 20 слов */}
                 </p>
-                <p style={{ fontSize: '18px', color: '#e74c3c', fontWeight: 'bold' }}>Цена: {item.device.price}₸</p>
+                <p style={{ fontSize: '18px', color: '#e74c3c', fontWeight: 'bold' }}>{t("Price:")}: {item.device.price}₸</p>
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
                   <button 
                     onClick={() => handleQuantityChange(item.device.id, item.quantity - 1)} 
@@ -133,13 +135,13 @@ const Basket = () => {
                 <button 
                   onClick={() => handleRemoveFromBasket(item.device.id)} 
                   style={{ marginTop: '10px', padding: '8px 12px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                  Удалить из корзины
+                  {t("Remove from basket")}
                 </button>
               </div>
             </div>
           ))}
           <div className="basket-total" style={{ marginTop: '20px', fontSize: '20px', fontWeight: 'bold', color: '#333' }}>
-            <h3>Общая сумма: {totalPrice}₸</h3>
+            <h3>{t("Total amount")}: {totalPrice}₸</h3>
           </div>
         </div>
       )}
