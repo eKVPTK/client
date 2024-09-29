@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { FaSearch, FaList, FaTh, FaInfoCircle, FaCaretDown } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import WarningBeta from '../components/WarningBeta';
 
 const Shop = observer(() => {
   const [devices, setDevices] = useState([]);
@@ -14,9 +15,8 @@ const Shop = observer(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState('list');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Состояние для выпадающего меню
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
   const limit = 9;
-  const descriptionWordLimit = 40;
   const { t } = useTranslation();
 
   const loadData = async () => {
@@ -35,6 +35,19 @@ const Shop = observer(() => {
   useEffect(() => {
     loadData();
   }, [selectedBrand, selectedType, page]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewMode(window.innerWidth < 768 ? 'grid' : 'list');
+    };
+
+    handleResize(); // Устанавливаем начальное состояние
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleBrandChange = (brandId) => {
     setSelectedBrand(brandId);
@@ -56,18 +69,18 @@ const Shop = observer(() => {
     if (newPage >= 1) setPage(newPage);
   };
 
-  const getDescriptionLimit = () => {
-    const isMobile = window.innerWidth < 768; 
-    return isMobile ? 20 : 40; 
-  };
-
   const truncateDescription = (description) => {
     const words = description.split(' ');
-    const wordLimit = getDescriptionLimit();
+    const wordLimit = getDescriptionLimit(); // Используем функцию getDescriptionLimit для определения лимита слов
     if (words.length > wordLimit) {
       return words.slice(0, wordLimit).join(' ') + '...';
     }
     return description;
+  };
+  
+  const getDescriptionLimit = () => {
+    const isMobile = window.innerWidth < 768; 
+    return isMobile ? 20 : 40; 
   };
 
   const filteredDevices = devices.filter(device =>
@@ -78,12 +91,12 @@ const Shop = observer(() => {
   return (
     <div className="shop container mx-auto py-8 px-4">
       <header className="flex flex-col md:flex-row mb-6 items-center justify-between">
-        <div className="text-4xl font-bold text-blue-600 mr-4 mb-4 md:mb-0">{t('Логотип')}</div>
+        <div className="text-4xl font-bold text-blue-600 mr-4 mb-4 md:mb-0">OptiTradeHub</div>
         <div className="flex items-center w-full">
           <div className="relative w-full">
             <input
               type="text"
-              placeholder={t('searchPlaceholder')} // Перевод для плейсхолдера
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={handleSearchChange}
               className="border border-black rounded-full pl-4 p-4 w-full h-12 shadow focus:outline-none"
@@ -203,6 +216,9 @@ const Shop = observer(() => {
             ))}
           </div>
 
+          <div>
+            <WarningBeta />
+          </div>
           <div className={`device-list ${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6' : ''}`}>
             {filteredDevices.length === 0 ? (
               <p className="text-center text-gray-500">{t('noProducts')}</p>
@@ -211,7 +227,6 @@ const Shop = observer(() => {
                 <div
                   key={device.id}
                   className={`device-item border rounded-lg shadow-lg hover:shadow-xl transition duration-200 mb-6 bg-white p-4 ${viewMode === 'grid' ? '' : 'flex items-center'}`}
-                  style={styles.deviceItem(viewMode)}
                 >
                   <div className="flex-shrink-0">
                     <img
@@ -225,7 +240,7 @@ const Shop = observer(() => {
                       <h2 className="text-lg font-bold text-gray-800 hover:text-blue-600 transition duration-200 mb-2">{device.name}</h2>
                     </Link>
                     <p className="text-gray-600 mb-2">
-                      {truncateDescription(device.description, descriptionWordLimit)}
+                      {truncateDescription(device.description)}
                     </p>
                     <p className="text-xl font-bold text-green-600">{device.price} ₸</p>
                     <p className="text-sm text-gray-500 flex items-center">
@@ -259,18 +274,5 @@ const Shop = observer(() => {
     </div>
   );
 });
-
-const styles = {
-  container: {
-    backgroundColor: '#f7f7f7',
-  },
-  deviceItem: (viewMode) => ({
-    transition: 'transform 0.2s',
-    transform: viewMode === 'grid' ? 'none' : 'scale(1)',
-    '&:hover': {
-      transform: 'scale(1.05)',
-    },
-  }),
-};
 
 export default Shop;

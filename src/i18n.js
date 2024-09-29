@@ -61,8 +61,18 @@ i18n.use(initReactI18next).init({
         "Еще раз, большое спасибо за ваше терпение, понимание и поддержку!":
           "Once again, thank you very much for your patience, understanding, and support!",
         "Напишите нам и сообщите об ошибке!": "Write to us and report the error!",
-        
-     
+        'title': "Contact Us",
+        'description': "We are here to help you. Please reach out with any questions or concerns.",
+        'email': "Email Us",
+        'phone': "Call Us",
+        'address': "Visit Us",
+        'emailLink': "ekvptk@example.com",
+        'phoneLink': "+7 747 309 14 72",
+        'addressLink': "123 Example St, City, Country",
+        "allBrands": "All Brands",
+        'warningTitle': "Beta Version",
+        'warningMessage': "This is a beta version of the application. Please report any issues you encounter.",
+        'contactUs': "Contact Us",
       },
     },
     ru: {
@@ -117,6 +127,19 @@ i18n.use(initReactI18next).init({
         "Еще раз, большое спасибо за ваше терпение, понимание и поддержку!":
           "Еще раз, большое спасибо за ваше терпение, понимание и поддержку!",
         "Напишите нам и сообщите об ошибке!": "Напишите нам и сообщите об ошибке!",
+        'title': "Свяжитесь с нами",
+        'description': "Мы здесь, чтобы помочь вам. Пожалуйста, свяжитесь с нами по любым вопросам.",
+        'email': "Напишите нам",
+        'phone': "Позвоните нам",
+        'address': "Посетите нас",
+        'emailLink': "ekvptk@example.com",
+        'phoneLink': "+7 747 309 14 72",
+        'addressLink': "123 Примерная улица, Город, Страна",
+        "allBrands": "Все бренды",
+        'warningTitle': "Бета-версия",
+        'warningMessage': "Это бета-версия приложения. Пожалуйста, сообщите о любых проблемах, с которыми вы столкнулись.",
+        'contactUs': "Свяжитесь с нами",
+    
      
       },
     },
@@ -172,7 +195,18 @@ i18n.use(initReactI18next).init({
         "Еще раз, большое спасибо за ваше терпение, понимание и поддержку!":
           "Тағы да, шыдамдылығыңыз, түсінігіңіз бен қолдауыңыз үшін көп рахмет!",
         "Напишите нам и сообщите об ошибке!": "Бізге жазыңыз және қателік туралы хабарлаңыз!",
-     
+        "title": "Бізбен байланысыңыз",
+        'description': "Біз сізге көмектесуге дайынбыз. Сұрақтарыңыз болса, хабарласыңыз.",
+        'email': "Бізге хат жазыңыз",
+        'phone': "Бізге қоңырау шалыңыз",
+        'address': "Бізді табыңыз",
+        'emailLink': "ekvptk@example.com",
+        'phoneLink': "+7 747 309 14 72",
+        'addressLink': "123 Мысал көшесі, Қала, Ел",
+        "allBrands": "Барлық маркалар",
+        'warningTitle': "Бета нұсқасы",
+        'warningMessage': "Бұл қосымшаның бета нұсқасы. Кездескен мәселелер туралы хабарласыңыз.",
+        'contactUs': "Бізбен байланысыңыз",
       },
     },
   },

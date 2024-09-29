@@ -2,10 +2,10 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AGREEMENT_ROUTE } from "../utils/consts";
-import { FaTelegramPlane, FaInstagram, FaTiktok } from "react-icons/fa"; // Импортируем иконки
+import { FaTelegramPlane, FaInstagram, FaTiktok } from "react-icons/fa"; 
 
 const Footer = () => {
-    const { t } = useTranslation(); // Инициализируем useTranslation
+    const { t } = useTranslation(); 
 
     return (
         <div>
@@ -27,13 +27,13 @@ const Footer = () => {
                 <div className="container mx-auto flex flex-col items-center space-y-2">
                     <div className="flex flex-wrap justify-center space-x-6">
                         <NavLink to={AGREEMENT_ROUTE} className="text-gray-600 hover:text-orange-500 transition">
-                            {t('privacyPolicy')} {/* Используем перевод */}
+                            {t('privacyPolicy')} 
                         </NavLink>
                         <NavLink to="/terms" className="text-gray-600 hover:text-orange-500 transition">
-                            {t('termsOfUse')} {/* Используем перевод */}
+                            {t('termsOfUse')} 
                         </NavLink>
-                        <NavLink to="/contact" className="text-gray-600 hover:text-orange-500 transition">
-                            {t('contacts')} {/* Используем перевод */}
+                        <NavLink to="/contacts" className="text-gray-600 hover:text-orange-500 transition">
+                            {t('contacts')} 
                         </NavLink>
                     </div>
                     <div className="text-center text-gray-500 mt-2">

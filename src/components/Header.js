@@ -9,6 +9,7 @@ import {
   BASKET_ROUTE,
   ABOUT_ROUTE,
   NOTIFICATION,
+  CONTACTS
 } from '../utils/consts';
 import { useUserStore } from '../store/UserStore';
 import anime from 'animejs';
@@ -74,6 +75,9 @@ const Header = () => {
           </NavLink>
           <NavLink to={NOTIFICATION} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
             {t('Уведомления')}
+          </NavLink>
+          <NavLink to={CONTACTS} className="text-gray-600 hover:text-orange-500 transition">
+            {t('contacts')} 
           </NavLink>
           <NavLink to={ABOUT_ROUTE} className="text-gray-700 hover:text-blue-600 text-sm md:text-base pl-4">
             {t('О нас')}
@@ -157,6 +161,9 @@ const Header = () => {
             onClick={toggleMenu}
           >
             {t('О нас')}
+          </NavLink>
+          <NavLink to={CONTACTS} className="block text-gray-700 hover:text-blue-600 text-sm pl-4">
+            {t('contacts')} 
           </NavLink>
           {user.isAuth && (
             <NavLink

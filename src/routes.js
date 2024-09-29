@@ -10,6 +10,7 @@ import About from './pages/About';
 import { Component } from 'react';
 import Agreement from './components/Agreement';
 import Notification from './pages/Notification';
+import Contacts from './pages/Contacts';
 
 export const authRoutes = [
   { path: '/admin', Component: Admin },
@@ -26,5 +27,6 @@ export const publicRoutes = [
   { path: '/device/:id', Component: DevicePage },
   { path: '/about', Component: About},
   { path: '/agreement', Component: Agreement},
-  { path: '/notification', Component: Notification}
+  { path: '/notification', Component: Notification},
+  { path: '/contacts', Component: Contacts}
 ];
